@@ -1,0 +1,12 @@
+E:\timodotodot\src\Lab4\bin\Debug\net7.0\Lab4.deps.json
+E:\timodotodot\src\Lab4\bin\Debug\net7.0\Lab4.dll
+E:\timodotodot\src\Lab4\bin\Debug\net7.0\Lab4.pdb
+E:\timodotodot\src\Lab4\obj\Debug\net7.0\Lab4.csproj.AssemblyReference.cache
+E:\timodotodot\src\Lab4\obj\Debug\net7.0\Lab4.GeneratedMSBuildEditorConfig.editorconfig
+E:\timodotodot\src\Lab4\obj\Debug\net7.0\Lab4.AssemblyInfoInputs.cache
+E:\timodotodot\src\Lab4\obj\Debug\net7.0\Lab4.AssemblyInfo.cs
+E:\timodotodot\src\Lab4\obj\Debug\net7.0\Lab4.csproj.CoreCompileInputs.cache
+E:\timodotodot\src\Lab4\obj\Debug\net7.0\Lab4.dll
+E:\timodotodot\src\Lab4\obj\Debug\net7.0\refint\Lab4.dll
+E:\timodotodot\src\Lab4\obj\Debug\net7.0\Lab4.pdb
+E:\timodotodot\src\Lab4\obj\Debug\net7.0\ref\Lab4.dll

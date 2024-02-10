@@ -1,0 +1,162 @@
+﻿using Itmo.ObjectOrientedProgramming.Lab2.Builders;
+using Itmo.ObjectOrientedProgramming.Lab2.Entities;
+using Itmo.ObjectOrientedProgramming.Lab2.Models;
+using Itmo.ObjectOrientedProgramming.Lab2.Services;
+using Itmo.ObjectOrientedProgramming.Lab2.Types;
+using Xunit;
+
+namespace Itmo.ObjectOrientedProgramming.Lab2.Tests;
+
+public class AssemblyWithIncompatibleComponents
+{
+    [Fact]
+    public void AssemblyWithIncompatibleComponentsTest()
+    {
+        // Arrange
+        IRepository repository = Repository.Instance;
+
+        var builderBios = new BiosBuilder();
+        Bios bios = builderBios
+            .SetType(BiosType.Uefi)
+            .SetVersion("2.0")
+            .SetSupportingCpu("i9-9900K")
+            .Build();
+
+        var builderMotherBoard = new MotherBoardBuilder();
+        MotherBoard motherBoard = builderMotherBoard
+            .SetModel("MSI MAG Z590 TORPEDO")
+            .SetSocket(Socket.Lga1200)
+            .SetPciExpressLines(1)
+            .SetSataPorts(6)
+            .SetChipset(Chipset.Z690)
+            .SetBios(bios)
+            .SetDdr(Ddr.Four)
+            .SetRamSlots(4)
+            .SetFormFactor(FormFactorMotherBoard.StandardAtx)
+            .Build();
+        repository.Add(builderMotherBoard);
+
+        var builderCpu = new CpuBuilder();
+        Cpu cpu = builderCpu
+            .SetModel("AMD Ryzen 5 5600X")
+            .SetSocket(Socket.Am4)
+            .SetFrequency(3.7)
+            .SetCoreCount(6)
+            .SetMemoryFrequency(3200)
+            .SetTdp(65)
+            .Build();
+        repository.Add(builderCpu);
+
+        var builderCooling = new ComputerCoolingBuilder();
+        ComputerCooling cooling = builderCooling
+            .SetModel("DEEPCOOL AK620")
+            .SetSize(138, 129, 160)
+            .SetSupportingSocket(Socket.Am5)
+            .SetSupportingSocket(Socket.Lga1200)
+            .SetSupportingSocket(Socket.Lga1700)
+            .SetPowerDissipation(260)
+            .Build();
+        repository.Add(builderCooling);
+
+        var builderIntelXmp = new ProfileBuilder();
+        Profiles xmp = builderIntelXmp
+            .SetType(ProfileType.Xmp)
+            .SetTiming("16-20-20")
+            .SetFrequency(3200)
+            .SetVoltage(1.35)
+            .Build();
+
+        var builderRam = new RamBuilder();
+        Ram ram = builderRam
+            .SetModel("Kingston FURY Beast Black")
+            .SetMemory(32)
+            .SetFrequency(3200)
+            .SetDdr(Ddr.Four)
+            .SetVoltage(1.35)
+            .SetFormFactor(RamFormFactor.Dimm)
+            .SetProfile(xmp)
+            .Build();
+        repository.Add(builderRam);
+
+        var builderGpu = new GpuBuilder();
+        Gpu gpu = builderGpu
+            .SetModel("RTX 4070 Ti")
+            .SetVideoMemory(12)
+            .SetPciExpressVersion("PCI-E 4.0")
+            .SetFrequency(2310.0)
+            .SetSize(329, 128)
+            .SetVoltage(285)
+            .Build();
+        repository.Add(builderGpu);
+
+        var builderHdd = new StorageDeviceBuilder();
+        StorageDevice hdd = builderHdd
+            .SetModel("HDD 2TB")
+            .SetType(TypeStorageDevice.Hdd)
+            .SetMemory(2048)
+            .SetSpeedWork(7200)
+            .SetVoltage(6.8)
+            .Build();
+        repository.Add(builderHdd);
+
+        var builderPcCase = new PcCaseBuilder();
+        PcCase pcCase = builderPcCase
+            .SetSize(386, 230, 491)
+            .SetGpuMaxSize(330, 220)
+            .SetSupportingMotherBoardFormFactor(FormFactorMotherBoard.StandardAtx)
+            .SetSupportingMotherBoardFormFactor(FormFactorMotherBoard.MicroAtx)
+            .Build();
+
+        var powerUnit = new PowerUnit("beQuiet 400W", 800);
+
+        // Act
+        var builderComputer = new PcBuilder();
+        Computer computer = builderComputer
+            .SetName("TERMINATOR2208")
+            .SetPcCase(pcCase)
+            .SetMotherBoard(motherBoard)
+            .SetCpu(cpu)
+            .SetRam(ram)
+            .SetComputerCooling(cooling)
+            .SetPowerUnit(powerUnit)
+            .SetStorageDevice(hdd)
+            .SetGpu(gpu)
+            .Build();
+        repository.Add(builderComputer);
+
+        var computerAssemblyCheck = new ComputerAssemblyCheck();
+        computerAssemblyCheck.GetCheckList(computer);
+
+        const string comment1 = "BIOS not supporting this CPU";
+        const string expectedResult1 = comment1;
+        string result1 = " ";
+
+        const string comment2 = "Motherboard and CPU socket mismatch";
+        const string expectedResult2 = comment2;
+        string result2 = " ";
+
+        const string comment3 = "ComputerCooling not supporting this CPU socket";
+        const string expectedResult3 = comment3;
+        string result3 = " ";
+
+        if (computerAssemblyCheck.CheckError(comment1))
+        {
+            result1 = comment1;
+        }
+
+        if (computerAssemblyCheck.CheckError(comment2))
+        {
+            result2 = comment2;
+        }
+
+        if (computerAssemblyCheck.CheckError(comment3))
+        {
+            result3 = comment3;
+        }
+
+        // Assert
+        Assert.Equal(expectedResult1, result1);
+        Assert.Equal(expectedResult2, result2);
+        Assert.Equal(expectedResult3, result3);
+    }
+}
